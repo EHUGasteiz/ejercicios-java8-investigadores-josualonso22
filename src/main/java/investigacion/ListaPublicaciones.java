@@ -35,7 +35,10 @@ public class ListaPublicaciones {
      */
     public List<Publicacion> getPublicacionesInvestigador(String pId) {
         // TODO: Ejercicio 1
-        return null;
+        return listaPublicaciones
+                .stream()
+                .filter(p-> p.esAutor(pId))
+                .toList();
     }
 
     /**

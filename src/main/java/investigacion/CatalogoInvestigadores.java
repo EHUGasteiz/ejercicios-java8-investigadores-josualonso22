@@ -1,8 +1,12 @@
 package investigacion;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.*;
 
 /**
  * Clase CatalogoInvestigadores
@@ -50,7 +54,10 @@ public class CatalogoInvestigadores {
      */
     public List<Investigador> getListaInvestigadoresOrdenadaPorPublicaciones() {
         // TODO: Ejercicio 7
-        return null;
+        return listaInvestigadores
+                .stream()
+                .sorted(comparing(Investigador::getNumeroPublicaciones).reversed())
+                .toList();
     }
 
     /**
@@ -60,7 +67,11 @@ public class CatalogoInvestigadores {
      */
     public Map<String, Double> getMediaCitasPorDepartamento() {
         // TODO: Ejercicio 8
-        return null;
+        return listaInvestigadores
+                .stream()
+                .collect(groupingBy(Investigador::getDepartamento
+                        ,averagingDouble
+                        (Investigador::getNumCitasTotales)));
 
     }
 
@@ -71,7 +82,12 @@ public class CatalogoInvestigadores {
      */
     public Map<String, Map<Integer,List<String>>> getInvestigadoresPorDepYHIndex() {
         // TODO: Ejercicio 10
-        return null;
+        return listaInvestigadores
+                .stream()
+                .collect(groupingBy(Investigador::getDepartamento
+                        ,groupingBy(Investigador::getHIndex,mapping
+                                (Investigador::getNombre,toList()))
+                ));
 
     }
 
@@ -83,7 +99,11 @@ public class CatalogoInvestigadores {
      */
     public List<Investigador> getInvestigadoresOrdenadosPorDepYHIndex() {
         // TODO: Ejercicio 9
-        return null;
+        return listaInvestigadores
+                .stream()
+                .sorted(comparing(Investigador::getDepartamento).reversed()
+                        .thenComparing(Investigador::getHIndex).reversed())
+                .toList();
     }
 
     /**

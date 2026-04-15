@@ -2,6 +2,7 @@ package investigacion;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.stream.IntStream;
 
 import static java.lang.String.format;
 
@@ -76,7 +77,12 @@ public class Investigador {
      */
     public int getHIndex() {
         // TODO: Ejercicio 5
-        return 0;
+        return IntStream
+                .iterate(getNumeroPublicaciones(), h -> h - 1)
+                .limit(getNumeroPublicaciones())
+                .filter(h -> getNumPublicacionesConAlMenosCitas(h)>=h)
+                .findFirst()
+                .orElse(0);
     }
 
     /**
@@ -87,7 +93,9 @@ public class Investigador {
      */
     public long getNumPublicacionesConAlMenosCitas(int pNum) {
         // TODO: Ejercicio 4
-        return 0;
+        return ListaPublicaciones.getListaPublicaciones().getPublicacionesInvestigador(id)
+                .stream()
+                .filter(p -> p.getNumCitas() >= pNum).count();
     }
 
     /**
@@ -97,7 +105,7 @@ public class Investigador {
      */
     public int getNumeroPublicaciones() {
         // TODO: Ejercicio 2
-        return 0;
+        return ListaPublicaciones.getListaPublicaciones().getPublicacionesInvestigador(id).size();
     }
 
     /**
@@ -107,7 +115,11 @@ public class Investigador {
      */
     public int getNumCitasTotales() {
         // TODO: Ejercicio 3
-        return 0;
+        var numCitas = ListaPublicaciones.getListaPublicaciones().getPublicacionesInvestigador(id)
+                .stream()
+                .mapToInt(Publicacion::getNumCitas).sum();
+
+        return numCitas;
     }
 
     @Override
